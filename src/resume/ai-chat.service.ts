@@ -39,7 +39,7 @@ export class AiChatService {
 
       // Require Gemini API key - no fallback to rule-based responses
       if (!this.model) {
-        const isProduction = process.env.NODE_ENV === 'production';
+        const isProduction = process.env.NODE_ENV === "production";
         if (isProduction) {
           return "🤖 **AI Configuration Missing**\n\nThe Gemini API key needs to be configured in the cloud environment.\n\n*Contact the administrator to set up the GEMINI_API_KEY environment variable.*\n\nOnce configured, you'll have full access to Nathan's AI-powered resume assistant!";
         } else {

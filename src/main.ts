@@ -36,7 +36,7 @@ async function bootstrap() {
     });
 
     // Fallback route for SPA - serve index.html for all non-API routes
-    app.getHttpAdapter().get("*", (req: any, res: any) => {
+    app.getHttpAdapter().get("/*", (req: any, res: any) => {
       console.log(`Request path: ${req.path}`);
       if (!req.path.startsWith("/api")) {
         console.log(`Serving index.html for: ${req.path}`);
