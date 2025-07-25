@@ -1,13 +1,24 @@
-import {
-  faCode,
-  faLightbulb,
-  faRocket,
-} from "@fortawesome/free-solid-svg-icons";
+import { faRocket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  Code as CodeIcon,
+  Launch as LaunchIcon,
+  Lightbulb as LightbulbIcon,
+} from "@mui/icons-material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  CircularProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { resumeApi } from "../api/ResumeApi";
-import "./Projects.css";
 
 interface Project {
   name: string;
@@ -74,110 +85,181 @@ const Projects = observer(() => {
 
   if (isLoading) {
     return (
-      <div className="projects-container">
-        <div className="projects-header">
-          <h2>
-            <FontAwesomeIcon icon={faRocket} className="projects-icon" /> Live
-            Projects
-          </h2>
-          <p>AI-Assisted applications built with Claude & Gemini</p>
-        </div>
-        <div className="projects-loading">
-          <div className="loading-spinner"></div>
-          <p>Loading projects...</p>
-        </div>
-      </div>
+      <Card>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            <FontAwesomeIcon icon={faRocket} style={{ marginRight: "8px" }} />
+            Live Projects
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            AI-Assisted applications built with Claude & Gemini
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              py: 4,
+            }}
+          >
+            <CircularProgress size={32} sx={{ mb: 2 }} />
+            <Typography variant="body2">Loading projects...</Typography>
+          </Box>
+        </CardContent>
+      </Card>
     );
   }
 
   if (error) {
     return (
-      <div className="projects-container">
-        <div className="projects-header">
-          <h2>
-            <FontAwesomeIcon icon={faRocket} className="projects-icon" /> Live
-            Projects
-          </h2>
-          <p>Explore Nathan's deployed applications</p>
-        </div>
-        <div className="projects-error">
-          <p>Unable to load projects at the moment.</p>
-          <button onClick={loadProjects} className="retry-button">
-            Try Again
-          </button>
-        </div>
-      </div>
+      <Card>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            <FontAwesomeIcon icon={faRocket} style={{ marginRight: "8px" }} />
+            Live Projects
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            Explore Nathan's deployed applications
+          </Typography>
+          <Alert severity="error" sx={{ mt: 2 }}>
+            <Typography variant="body2" gutterBottom>
+              Unable to load projects at the moment.
+            </Typography>
+            <Button
+              onClick={loadProjects}
+              variant="outlined"
+              size="small"
+              sx={{ mt: 1 }}
+            >
+              Try Again
+            </Button>
+          </Alert>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="projects-container">
-      <div className="projects-header">
-        <h2>
-          <FontAwesomeIcon icon={faRocket} className="projects-icon" /> Live
-          Projects
-        </h2>
-        <p>AI-Assisted applications built with Claude & Gemini</p>
-      </div>
+    <Card>
+      <CardContent>
+        <Typography variant="h6" gutterBottom>
+          <FontAwesomeIcon icon={faRocket} style={{ marginRight: "8px" }} />
+          Live Projects
+        </Typography>
+        <Typography variant="body2" color="text.secondary" gutterBottom>
+          AI-Assisted applications built with Claude & Gemini
+        </Typography>
 
-      <div className="projects-grid">
-        {projects.map((project, index) => (
-          <div
-            key={index}
-            className="project-card"
-            onClick={() => handleProjectClick(project.url)}
-          >
-            <div className="project-card-header">
-              <h3>{project.name}</h3>
-              <div className="project-status">
-                <div className="status-dot"></div>
-                <span>Live</span>
-              </div>
-            </div>
+        <Stack spacing={2} sx={{ mt: 2 }}>
+          {projects.map((project, index) => (
+            <Card
+              key={index}
+              variant="outlined"
+              sx={{
+                cursor: "pointer",
+                transition: "all 0.2s ease-in-out",
+                "&:hover": {
+                  boxShadow: 2,
+                  transform: "translateY(-2px)",
+                },
+              }}
+              onClick={() => handleProjectClick(project.url)}
+            >
+              <CardContent sx={{ p: 2 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    mb: 1,
+                  }}
+                >
+                  <Typography variant="subtitle1" fontWeight="medium">
+                    {project.name}
+                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                    <Box
+                      sx={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: "50%",
+                        backgroundColor: "success.main",
+                      }}
+                    />
+                    <Typography variant="caption" color="success.main">
+                      Live
+                    </Typography>
+                  </Box>
+                </Box>
 
-            <p className="project-description">{project.description}</p>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 2 }}
+                >
+                  {project.description}
+                </Typography>
 
-            {project.stack && project.stack.length > 0 && (
-              <div className="project-stack">
-                <FontAwesomeIcon icon={faCode} className="stack-icon" />
-                <div className="stack-items">
-                  {project.stack.map((tech, techIndex) => (
-                    <span key={techIndex} className="stack-item">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
+                {project.stack && project.stack.length > 0 && (
+                  <Box sx={{ mb: 2 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 0.5,
+                        mb: 1,
+                      }}
+                    >
+                      <CodeIcon fontSize="small" color="action" />
+                      <Typography variant="caption" color="text.secondary">
+                        Tech Stack
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {project.stack.map((tech, techIndex) => (
+                        <Chip
+                          key={techIndex}
+                          label={tech}
+                          size="small"
+                          variant="outlined"
+                          sx={{ fontSize: "0.7rem", height: 20 }}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                )}
 
-            <div className="project-card-footer">
-              <div className="project-url">{new URL(project.url).hostname}</div>
-              <div className="project-action">
-                <span>Launch App</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M7 17L17 7M17 7H7M17 7V17"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="caption" color="text.secondary">
+                    {new URL(project.url).hostname}
+                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                    <Typography variant="caption" color="primary">
+                      Launch App
+                    </Typography>
+                    <LaunchIcon fontSize="small" color="primary" />
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          ))}
+        </Stack>
 
-      <div className="projects-note">
-        <p>
-          <FontAwesomeIcon icon={faLightbulb} className="note-icon" />{" "}
-          <strong>Note:</strong> These are fully functional applications hosted
-          on Google Cloud Platform. Click on any card to interact with the live
-          demos!
-        </p>
-      </div>
-    </div>
+        <Alert severity="info" sx={{ mt: 3 }} icon={<LightbulbIcon />}>
+          <Typography variant="body2">
+            <strong>Note:</strong> These are fully functional applications
+            hosted on Google Cloud Platform. Click on any card to interact with
+            the live demos!
+          </Typography>
+        </Alert>
+      </CardContent>
+    </Card>
   );
 });
 

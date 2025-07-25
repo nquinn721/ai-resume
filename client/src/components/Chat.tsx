@@ -1,11 +1,25 @@
+import { Send as SendIcon } from "@mui/icons-material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+  IconButton,
+  Paper,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useRef, useState } from "react";
 import { appStore } from "../stores/AppStore";
-import "./Chat.css";
 
 const Chat = observer(() => {
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -42,59 +56,137 @@ const Chat = observer(() => {
   };
 
   return (
-    <div className="chat-container">
-      <div className="messages-container">
-        {appStore.formattedMessages.map((message) => (
-          <div key={message.id} className={`message ${message.sender}`}>
-            <div className="message-content">
-              <p>{message.text}</p>
-              <span className="timestamp">
-                {message.timestamp.toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </span>
-            </div>
-          </div>
-        ))}
+    <Card
+      sx={{
+        height: isMobile ? "calc(100vh - 200px)" : "600px",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <CardContent
+        sx={{ flexGrow: 1, display: "flex", flexDirection: "column", p: 0 }}
+      >
+        {/* Messages Container */}
+        <Box
+          sx={{
+            flexGrow: 1,
+            overflowY: "auto",
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          {appStore.formattedMessages.map((message) => (
+            <Box
+              key={message.id}
+              sx={{
+                display: "flex",
+                justifyContent:
+                  message.sender === "user" ? "flex-end" : "flex-start",
+                mb: 1,
+              }}
+            >
+              <Paper
+                elevation={1}
+                sx={{
+                  p: 2,
+                  maxWidth: "80%",
+                  backgroundColor:
+                    message.sender === "user" ? "primary.main" : "grey.100",
+                  color:
+                    message.sender === "user"
+                      ? "primary.contrastText"
+                      : "text.primary",
+                  borderRadius: 2,
+                }}
+              >
+                <Typography variant="body1" sx={{ mb: 1 }}>
+                  {message.text}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    opacity: 0.7,
+                    fontSize: "0.75rem",
+                  }}
+                >
+                  {message.timestamp.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </Typography>
+              </Paper>
+            </Box>
+          ))}
 
-        {appStore.isTyping && (
-          <div className="message bot">
-            <div className="message-content">
-              <div className="typing-indicator">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-          </div>
-        )}
+          {appStore.isTyping && (
+            <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 1 }}>
+              <Paper
+                elevation={1}
+                sx={{
+                  p: 2,
+                  backgroundColor: "grey.100",
+                  borderRadius: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <CircularProgress size={16} />
+                <Typography variant="body2" color="text.secondary">
+                  AI is typing...
+                </Typography>
+              </Paper>
+            </Box>
+          )}
 
-        <div ref={messagesEndRef} />
-      </div>
+          <div ref={messagesEndRef} />
+        </Box>
 
-      <div className="input-container">
-        <div className="input-wrapper">
-          <textarea
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Ask me about my resume..."
-            className="message-input"
-            rows={1}
-          />
-          <button
-            onClick={handleSend}
-            disabled={!inputValue.trim() || appStore.isTyping}
-            className="send-button"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
+        {/* Input Container */}
+        <Box
+          sx={{
+            p: 2,
+            borderTop: 1,
+            borderColor: "divider",
+            backgroundColor: "background.paper",
+          }}
+        >
+          <Box sx={{ display: "flex", gap: 1, alignItems: "flex-end" }}>
+            <TextField
+              fullWidth
+              multiline
+              maxRows={4}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask me about my resume..."
+              variant="outlined"
+              size="small"
+              sx={{ flexGrow: 1 }}
+            />
+            <IconButton
+              onClick={handleSend}
+              disabled={!inputValue.trim() || appStore.isTyping}
+              color="primary"
+              sx={{
+                backgroundColor: "primary.main",
+                color: "primary.contrastText",
+                "&:hover": {
+                  backgroundColor: "primary.dark",
+                },
+                "&:disabled": {
+                  backgroundColor: "grey.300",
+                },
+              }}
+            >
+              <SendIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      </CardContent>
+    </Card>
   );
 });
 

@@ -1,19 +1,45 @@
-import {
-  faComments,
-  faFileAlt,
-  faLightbulb,
-  faRobot,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
+import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  Chat as ChatIcon,
+  Close as CloseIcon,
+  Description as DescriptionIcon,
+  Menu as MenuIcon,
+  SmartToy as RobotIcon,
+} from "@mui/icons-material";
+import {
+  AppBar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  Container,
+  CssBaseline,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Drawer,
+  IconButton,
+  ThemeProvider,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Chat from "./components/Chat";
 import Projects from "./components/Projects";
 import { appStore } from "./stores/AppStore";
+import { theme } from "./theme";
 
 const App = observer(() => {
+  const muiTheme = useTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("md"));
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === "Escape" && appStore.isResumeModalOpen) {
@@ -34,6 +60,9 @@ const App = observer(() => {
     // Send the suggestion directly to the store
     appStore.sendMessage(suggestion);
 
+    // Close mobile menu if open
+    setMobileMenuOpen(false);
+
     // Scroll to chat
     const chatContainer = document.querySelector(".chat-container");
     if (chatContainer) {
@@ -50,132 +79,276 @@ const App = observer(() => {
   ];
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <div className="header-content">
-          <div className="title-section">
-            <h1>
-              <FontAwesomeIcon icon={faRobot} className="header-icon" /> AI
-              Resume Assistant
-            </h1>
-            <p className="subtitle">
-              Discover my qualifications through intelligent conversation
-            </p>
-          </div>
-          <div className="header-actions">
-            <button
-              className="header-resume-button"
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box
+        sx={{
+          flexGrow: 1,
+          minHeight: "100vh",
+          backgroundColor: "background.default",
+        }}
+      >
+        {/* App Bar */}
+        <AppBar position="static" elevation={2}>
+          <Toolbar>
+            <RobotIcon sx={{ mr: 2 }} />
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              AI Resume Assistant
+            </Typography>
+            <Button
+              color="inherit"
+              startIcon={<DescriptionIcon />}
               onClick={() => appStore.openResumeModal()}
+              sx={{ mr: 2 }}
             >
-              <FontAwesomeIcon icon={faFileAlt} className="resume-icon" />
-              <span>View Full Resume</span>
-            </button>
-            <div
-              className={`status-indicator ${appStore.connectionStatusClass}`}
+              {!isMobile && "View Resume"}
+            </Button>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                px: 2,
+                py: 0.5,
+                borderRadius: 1,
+                backgroundColor:
+                  appStore.connectionStatusClass === "connected"
+                    ? "success.main"
+                    : "warning.main",
+                color: "white",
+              }}
             >
-              <div className="status-dot"></div>
-              <span>{appStore.apiStatus}</span>
-            </div>
-          </div>
-        </div>
-      </header>
+              <Box
+                sx={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  backgroundColor: "currentColor",
+                }}
+              />
+              <Typography variant="body2">{appStore.apiStatus}</Typography>
+            </Box>
+            {isMobile && (
+              <IconButton
+                color="inherit"
+                onClick={() => setMobileMenuOpen(true)}
+                sx={{ ml: 1 }}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
+          </Toolbar>
+        </AppBar>
 
-      <main className="app-main">
-        <div className="app-main-content">
-          <aside className="sidebar left-sidebar">
-            <div className="intro-section">
-              <h2>
-                <FontAwesomeIcon icon={faComments} className="chat-icon" /> Chat
-                with Nathan's AI Assistant
-              </h2>
-              <p>
-                Get to know Nathan Quinn through an interactive conversation!
-                Ask about his experience, skills, projects, or anything else
-                you'd like to learn. The AI has access to his complete resume
-                and can give you detailed insights.
-              </p>
-              <div className="suggestion-chips">
-                {suggestions.map((suggestion, index) => (
-                  <span
-                    key={index}
-                    className="chip"
-                    onClick={() => handleSuggestionClick(suggestion)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        handleSuggestionClick(suggestion);
-                      }
+        {/* Main Content */}
+        <Container maxWidth="xl" sx={{ py: 3 }}>
+          {isMobile ? (
+            // Mobile Layout
+            <Box>
+              <Chat />
+
+              {/* Mobile Drawer */}
+              <Drawer
+                anchor="right"
+                open={mobileMenuOpen}
+                onClose={() => setMobileMenuOpen(false)}
+                PaperProps={{
+                  sx: { width: "90%", maxWidth: 400 },
+                }}
+              >
+                <Box sx={{ p: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      mb: 2,
                     }}
                   >
-                    {suggestion}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </aside>
+                    <Typography variant="h6">Menu</Typography>
+                    <IconButton onClick={() => setMobileMenuOpen(false)}>
+                      <CloseIcon />
+                    </IconButton>
+                  </Box>
 
-          <section className="chat-centerpiece">
-            <Chat />
-          </section>
+                  {/* Suggestions in mobile drawer */}
+                  <Card sx={{ mb: 3 }}>
+                    <CardContent>
+                      <Typography variant="h6" gutterBottom>
+                        <ChatIcon sx={{ mr: 1, verticalAlign: "middle" }} />
+                        Quick Questions
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 2 }}
+                      >
+                        Get to know Nathan through these suggested questions:
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 1,
+                        }}
+                      >
+                        {suggestions.map((suggestion, index) => (
+                          <Chip
+                            key={index}
+                            label={suggestion}
+                            onClick={() => handleSuggestionClick(suggestion)}
+                            clickable
+                            variant="outlined"
+                            sx={{
+                              justifyContent: "flex-start",
+                              height: "auto",
+                              py: 1,
+                            }}
+                          />
+                        ))}
+                      </Box>
+                    </CardContent>
+                  </Card>
 
-          <aside className="sidebar right-sidebar">
-            <Projects />
-          </aside>
-        </div>
-      </main>
+                  {/* Projects in mobile drawer */}
+                  <Projects />
+                </Box>
+              </Drawer>
+            </Box>
+          ) : (
+            // Desktop Layout
+            <Box sx={{ display: "flex", gap: 3 }}>
+              {/* Left Sidebar - Suggestions */}
+              <Box sx={{ width: 300, flexShrink: 0 }}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      <ChatIcon sx={{ mr: 1, verticalAlign: "middle" }} />
+                      Chat with Nathan's AI Assistant
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: 2 }}
+                    >
+                      Get to know Nathan Quinn through an interactive
+                      conversation! Ask about his experience, skills, projects,
+                      or anything else you'd like to learn.
+                    </Typography>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                    >
+                      {suggestions.map((suggestion, index) => (
+                        <Chip
+                          key={index}
+                          label={suggestion}
+                          onClick={() => handleSuggestionClick(suggestion)}
+                          clickable
+                          variant="outlined"
+                          sx={{
+                            justifyContent: "flex-start",
+                            height: "auto",
+                            py: 1,
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Box>
 
-      {/* Resume Modal */}
-      {appStore.isResumeModalOpen && (
-        <div
-          className="modal-overlay"
-          onClick={() => appStore.closeResumeModal()}
+              {/* Center - Chat */}
+              <Box sx={{ flexGrow: 1 }}>
+                <Chat />
+              </Box>
+
+              {/* Right Sidebar - Projects */}
+              <Box sx={{ width: 300, flexShrink: 0 }}>
+                <Projects />
+              </Box>
+            </Box>
+          )}
+        </Container>
+
+        {/* Resume Modal */}
+        <Dialog
+          open={appStore.isResumeModalOpen}
+          onClose={() => appStore.closeResumeModal()}
+          maxWidth="md"
+          fullWidth
+          fullScreen={isMobile}
         >
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>
-                <FontAwesomeIcon icon={faFileAlt} className="modal-icon" />
+          <DialogTitle>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <DescriptionIcon sx={{ mr: 1 }} />
                 Nathan's Full Resume
-              </h3>
-              <button
-                className="modal-close"
-                onClick={() => appStore.closeResumeModal()}
+              </Box>
+              <IconButton onClick={() => appStore.closeResumeModal()}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          </DialogTitle>
+          <DialogContent>
+            {appStore.isLoadingResume ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  py: 4,
+                }}
               >
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
-            </div>
-            <div className="modal-body">
-              {appStore.isLoadingResume ? (
-                <div className="resume-loading">
-                  <FontAwesomeIcon
-                    icon={faLightbulb}
-                    className="loading-icon"
-                  />
-                  <p>Loading resume content...</p>
-                </div>
-              ) : appStore.resumeContent ? (
-                <div
-                  className="resume-content"
-                  dangerouslySetInnerHTML={{ __html: appStore.resumeContent }}
+                <FontAwesomeIcon icon={faLightbulb} className="loading-icon" />
+                <Typography sx={{ mt: 2 }}>
+                  Loading resume content...
+                </Typography>
+              </Box>
+            ) : appStore.resumeContent ? (
+              <Box
+                dangerouslySetInnerHTML={{ __html: appStore.resumeContent }}
+                sx={{
+                  "& *": {
+                    maxWidth: "100%",
+                  },
+                }}
+              />
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  py: 4,
+                }}
+              >
+                <DescriptionIcon
+                  sx={{ fontSize: 48, color: "text.secondary", mb: 2 }}
                 />
-              ) : (
-                <div className="resume-error">
-                  <FontAwesomeIcon icon={faFileAlt} className="error-icon" />
-                  <p>Failed to load resume content. Please try again.</p>
-                  <button
-                    className="retry-button"
-                    onClick={() => appStore.loadResume()}
-                  >
-                    Retry
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+                <Typography variant="h6" gutterBottom>
+                  Failed to load resume content
+                </Typography>
+                <Typography color="text.secondary" sx={{ mb: 2 }}>
+                  Please try again.
+                </Typography>
+                <Button
+                  variant="contained"
+                  onClick={() => appStore.loadResume()}
+                >
+                  Retry
+                </Button>
+              </Box>
+            )}
+          </DialogContent>
+        </Dialog>
+      </Box>
+    </ThemeProvider>
   );
 });
 
