@@ -20,7 +20,17 @@ async function bootstrap() {
     });
 
     // Serve static files from React build
-    app.useStaticAssets(join(__dirname, "..", "public"));
+    const clientDistPath = join(__dirname, "..", "client", "dist");
+    app.useStaticAssets(clientDistPath);
+    
+    // Fallback route for SPA - serve index.html for all non-API routes
+    app.use((req, res, next) => {
+      if (!req.path.startsWith('/api')) {
+        res.sendFile(join(clientDistPath, 'index.html'));
+      } else {
+        next();
+      }
+    });
   } else {
     // Development CORS - allow local development
     app.enableCors({
