@@ -39,7 +39,12 @@ export class AiChatService {
 
       // Require Gemini API key - no fallback to rule-based responses
       if (!this.model) {
-        return "🤖 **AI Setup Required**\n\nTo get intelligent responses about Nathan Quinn's qualifications, please add your Gemini API key to the `.env` file.\n\nSee `AI_SETUP_GUIDE.md` for detailed instructions.\n\n*Currently running without AI - please configure Gemini to unlock Nathan's full resume chat experience!*";
+        const isProduction = process.env.NODE_ENV === 'production';
+        if (isProduction) {
+          return "🤖 **AI Configuration Missing**\n\nThe Gemini API key needs to be configured in the cloud environment.\n\n*Contact the administrator to set up the GEMINI_API_KEY environment variable.*\n\nOnce configured, you'll have full access to Nathan's AI-powered resume assistant!";
+        } else {
+          return "🤖 **AI Setup Required**\n\nTo get intelligent responses about Nathan Quinn's qualifications, please add your Gemini API key to the `.env` file.\n\nSee `AI_SETUP_GUIDE.md` for detailed instructions.\n\n*Currently running without AI - please configure Gemini to unlock Nathan's full resume chat experience!*";
+        }
       }
 
       return await this.generateAIResponse(userMessage, resumeContent);
