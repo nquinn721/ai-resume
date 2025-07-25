@@ -114,7 +114,9 @@ const App = observer(() => {
                 backgroundColor:
                   appStore.connectionStatusClass === "connected"
                     ? "success.main"
-                    : "warning.main",
+                    : appStore.connectionStatusClass === "checking"
+                    ? "info.main"
+                    : "error.main",
                 color: "white",
               }}
             >
@@ -126,7 +128,9 @@ const App = observer(() => {
                   backgroundColor: "currentColor",
                 }}
               />
-              <Typography variant="body2">{appStore.apiStatus}</Typography>
+              <Typography variant="body2">
+                {appStore.apiStatus || "Checking..."}
+              </Typography>
             </Box>
             {isMobile && (
               <IconButton

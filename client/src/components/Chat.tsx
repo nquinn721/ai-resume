@@ -93,12 +93,14 @@ const Chat = observer(() => {
                   p: 2,
                   maxWidth: "80%",
                   backgroundColor:
-                    message.sender === "user" ? "primary.main" : "grey.100",
+                    message.sender === "user" ? "primary.main" : "grey.800",
                   color:
                     message.sender === "user"
                       ? "primary.contrastText"
                       : "text.primary",
                   borderRadius: 2,
+                  border: message.sender === "bot" ? 1 : 0,
+                  borderColor: "grey.700",
                 }}
               >
                 <Typography variant="body1" sx={{ mb: 1 }}>
@@ -126,11 +128,13 @@ const Chat = observer(() => {
                 elevation={1}
                 sx={{
                   p: 2,
-                  backgroundColor: "grey.100",
+                  backgroundColor: "grey.800",
                   borderRadius: 2,
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
+                  border: 1,
+                  borderColor: "grey.700",
                 }}
               >
                 <CircularProgress size={16} />
