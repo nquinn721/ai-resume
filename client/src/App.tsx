@@ -89,10 +89,26 @@ const App = observer(() => {
         }}
       >
         {/* App Bar */}
-        <AppBar position="static" elevation={2}>
+        <AppBar 
+          position="static" 
+          elevation={0}
+          sx={{
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(135deg, rgba(0, 230, 118, 0.8) 0%, rgba(255, 110, 199, 0.8) 100%)',
+              zIndex: -1,
+            }
+          }}
+        >
           <Toolbar>
-            <RobotIcon sx={{ mr: 2 }} />
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <RobotIcon sx={{ mr: 2, color: '#fff' }} />
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#fff', fontWeight: 600 }}>
               AI Resume Assistant
             </Typography>
             <Button
@@ -110,14 +126,15 @@ const App = observer(() => {
                 gap: 1,
                 px: 2,
                 py: 0.5,
-                borderRadius: 1,
-                backgroundColor:
+                borderRadius: 2,
+                background:
                   appStore.connectionStatusClass === "connected"
-                    ? "success.main"
+                    ? "linear-gradient(45deg, #00e676, #00b248)"
                     : appStore.connectionStatusClass === "checking"
-                    ? "info.main"
-                    : "error.main",
+                    ? "linear-gradient(45deg, #03dac6, #018786)"
+                    : "linear-gradient(45deg, #ff5722, #d84315)",
                 color: "white",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
               }}
             >
               <Box
@@ -126,9 +143,15 @@ const App = observer(() => {
                   height: 8,
                   borderRadius: "50%",
                   backgroundColor: "currentColor",
+                  animation: appStore.connectionStatusClass === "checking" ? "pulse 1.5s infinite" : "none",
+                  "@keyframes pulse": {
+                    "0%": { opacity: 1 },
+                    "50%": { opacity: 0.5 },
+                    "100%": { opacity: 1 },
+                  },
                 }}
               />
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
                 {appStore.apiStatus || "Checking..."}
               </Typography>
             </Box>
@@ -207,6 +230,16 @@ const App = observer(() => {
                               justifyContent: "flex-start",
                               height: "auto",
                               py: 1,
+                              borderColor: 'primary.main',
+                              color: 'primary.main',
+                              '&:hover': {
+                                background: 'linear-gradient(45deg, rgba(0, 230, 118, 0.1), rgba(255, 110, 199, 0.1))',
+                                borderColor: 'secondary.main',
+                                color: 'secondary.main',
+                                transform: 'translateY(-2px)',
+                                boxShadow: '0 4px 12px rgba(0, 230, 118, 0.3)',
+                              },
+                              transition: 'all 0.3s ease',
                             }}
                           />
                         ))}
@@ -253,6 +286,16 @@ const App = observer(() => {
                             justifyContent: "flex-start",
                             height: "auto",
                             py: 1,
+                            borderColor: 'primary.main',
+                            color: 'primary.main',
+                            '&:hover': {
+                              background: 'linear-gradient(45deg, rgba(0, 230, 118, 0.1), rgba(255, 110, 199, 0.1))',
+                              borderColor: 'secondary.main',
+                              color: 'secondary.main',
+                              transform: 'translateY(-2px)',
+                              boxShadow: '0 4px 12px rgba(0, 230, 118, 0.3)',
+                            },
+                            transition: 'all 0.3s ease',
                           }}
                         />
                       ))}

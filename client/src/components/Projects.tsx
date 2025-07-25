@@ -85,10 +85,23 @@ const Projects = observer(() => {
 
   if (isLoading) {
     return (
-      <Card>
+      <Card
+        sx={{
+          background: "linear-gradient(135deg, #1a1e3a, #2a2e4a)",
+          border: "1px solid #03dac6",
+          boxShadow: "0 4px 15px rgba(3, 218, 198, 0.2)",
+        }}
+      >
         <CardContent>
-          <Typography variant="h6" gutterBottom>
-            <FontAwesomeIcon icon={faRocket} style={{ marginRight: "8px" }} />
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ color: "#03dac6", fontWeight: 600 }}
+          >
+            <FontAwesomeIcon
+              icon={faRocket}
+              style={{ marginRight: "8px", color: "#ff6ec7" }}
+            />
             Live Projects
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
@@ -102,8 +115,17 @@ const Projects = observer(() => {
               py: 4,
             }}
           >
-            <CircularProgress size={32} sx={{ mb: 2 }} />
-            <Typography variant="body2">Loading projects...</Typography>
+            <CircularProgress
+              size={32}
+              sx={{
+                mb: 2,
+                color: "#00e676",
+                animation: "pulse 1.5s infinite",
+              }}
+            />
+            <Typography variant="body2" sx={{ color: "#03dac6" }}>
+              Loading projects...
+            </Typography>
           </Box>
         </CardContent>
       </Card>
@@ -112,16 +134,38 @@ const Projects = observer(() => {
 
   if (error) {
     return (
-      <Card>
+      <Card
+        sx={{
+          background: "linear-gradient(135deg, #1a1e3a, #2a2e4a)",
+          border: "1px solid #ff5722",
+          boxShadow: "0 4px 15px rgba(255, 87, 34, 0.2)",
+        }}
+      >
         <CardContent>
-          <Typography variant="h6" gutterBottom>
-            <FontAwesomeIcon icon={faRocket} style={{ marginRight: "8px" }} />
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ color: "#03dac6", fontWeight: 600 }}
+          >
+            <FontAwesomeIcon
+              icon={faRocket}
+              style={{ marginRight: "8px", color: "#ff6ec7" }}
+            />
             Live Projects
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
             Explore Nathan's deployed applications
           </Typography>
-          <Alert severity="error" sx={{ mt: 2 }}>
+          <Alert
+            severity="error"
+            sx={{
+              mt: 2,
+              background:
+                "linear-gradient(135deg, rgba(255, 87, 34, 0.1), rgba(211, 47, 47, 0.1))",
+              border: "1px solid #ff5722",
+              color: "#ff5722",
+            }}
+          >
             <Typography variant="body2" gutterBottom>
               Unable to load projects at the moment.
             </Typography>
@@ -129,7 +173,15 @@ const Projects = observer(() => {
               onClick={loadProjects}
               variant="outlined"
               size="small"
-              sx={{ mt: 1 }}
+              sx={{
+                mt: 1,
+                borderColor: "#ff5722",
+                color: "#ff5722",
+                "&:hover": {
+                  background: "rgba(255, 87, 34, 0.1)",
+                  borderColor: "#ff8a65",
+                },
+              }}
             >
               Try Again
             </Button>
@@ -140,10 +192,23 @@ const Projects = observer(() => {
   }
 
   return (
-    <Card>
+    <Card
+      sx={{
+        background: "linear-gradient(135deg, #1a1e3a, #2a2e4a)",
+        border: "1px solid #03dac6",
+        boxShadow: "0 4px 15px rgba(3, 218, 198, 0.2)",
+      }}
+    >
       <CardContent>
-        <Typography variant="h6" gutterBottom>
-          <FontAwesomeIcon icon={faRocket} style={{ marginRight: "8px" }} />
+        <Typography
+          variant="h6"
+          gutterBottom
+          sx={{ color: "#03dac6", fontWeight: 600 }}
+        >
+          <FontAwesomeIcon
+            icon={faRocket}
+            style={{ marginRight: "8px", color: "#ff6ec7" }}
+          />
           Live Projects
         </Typography>
         <Typography variant="body2" color="text.secondary" gutterBottom>
@@ -157,10 +222,16 @@ const Projects = observer(() => {
               variant="outlined"
               sx={{
                 cursor: "pointer",
-                transition: "all 0.2s ease-in-out",
+                transition: "all 0.3s ease-in-out",
+                background:
+                  "linear-gradient(135deg, rgba(0, 230, 118, 0.05), rgba(255, 110, 199, 0.05))",
+                border: "1px solid rgba(3, 218, 198, 0.3)",
                 "&:hover": {
-                  boxShadow: 2,
-                  transform: "translateY(-2px)",
+                  boxShadow: "0 8px 25px rgba(0, 230, 118, 0.3)",
+                  transform: "translateY(-4px)",
+                  border: "1px solid #00e676",
+                  background:
+                    "linear-gradient(135deg, rgba(0, 230, 118, 0.1), rgba(255, 110, 199, 0.1))",
                 },
               }}
               onClick={() => handleProjectClick(project.url)}
@@ -222,7 +293,18 @@ const Projects = observer(() => {
                           label={tech}
                           size="small"
                           variant="outlined"
-                          sx={{ fontSize: "0.7rem", height: 20 }}
+                          sx={{
+                            fontSize: "0.7rem",
+                            height: 20,
+                            borderColor: "#03dac6",
+                            color: "#03dac6",
+                            "&:hover": {
+                              borderColor: "#ff6ec7",
+                              color: "#ff6ec7",
+                              backgroundColor: "rgba(255, 110, 199, 0.1)",
+                            },
+                            transition: "all 0.2s ease",
+                          }}
                         />
                       ))}
                     </Box>

@@ -88,19 +88,33 @@ const Chat = observer(() => {
               }}
             >
               <Paper
-                elevation={1}
+                elevation={3}
                 sx={{
                   p: 2,
                   maxWidth: "80%",
-                  backgroundColor:
-                    message.sender === "user" ? "primary.main" : "grey.800",
-                  color:
-                    message.sender === "user"
-                      ? "primary.contrastText"
-                      : "text.primary",
-                  borderRadius: 2,
-                  border: message.sender === "bot" ? 1 : 0,
-                  borderColor: "grey.700",
+                  background:
+                    message.sender === "user" 
+                      ? "linear-gradient(135deg, #00e676, #00b248)"
+                      : "linear-gradient(135deg, #1a1e3a, #2a2e4a)",
+                  color: "#ffffff",
+                  borderRadius: 3,
+                  border: message.sender === "bot" ? "1px solid #03dac6" : "none",
+                  boxShadow: message.sender === "user" 
+                    ? "0 4px 15px rgba(0, 230, 118, 0.3)"
+                    : "0 4px 15px rgba(3, 218, 198, 0.2)",
+                  position: "relative",
+                  "&::before": message.sender === "bot" ? {
+                    content: '""',
+                    position: "absolute",
+                    top: -1,
+                    left: -1,
+                    right: -1,
+                    bottom: -1,
+                    background: "linear-gradient(45deg, #03dac6, #ff6ec7)",
+                    borderRadius: 3,
+                    zIndex: -1,
+                    opacity: 0.3,
+                  } : {},
                 }}
               >
                 <Typography variant="body1" sx={{ mb: 1 }}>
@@ -125,20 +139,26 @@ const Chat = observer(() => {
           {appStore.isTyping && (
             <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 1 }}>
               <Paper
-                elevation={1}
+                elevation={3}
                 sx={{
                   p: 2,
-                  backgroundColor: "grey.800",
-                  borderRadius: 2,
+                  background: "linear-gradient(135deg, #1a1e3a, #2a2e4a)",
+                  borderRadius: 3,
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
-                  border: 1,
-                  borderColor: "grey.700",
+                  border: "1px solid #03dac6",
+                  boxShadow: "0 4px 15px rgba(3, 218, 198, 0.2)",
                 }}
               >
-                <CircularProgress size={16} />
-                <Typography variant="body2" color="text.secondary">
+                <CircularProgress 
+                  size={16} 
+                  sx={{ 
+                    color: "#03dac6",
+                    animation: "pulse 1.5s infinite"
+                  }} 
+                />
+                <Typography variant="body2" sx={{ color: "#03dac6", fontWeight: 500 }}>
                   AI is typing...
                 </Typography>
               </Paper>
@@ -173,16 +193,21 @@ const Chat = observer(() => {
             <IconButton
               onClick={handleSend}
               disabled={!inputValue.trim() || appStore.isTyping}
-              color="primary"
               sx={{
-                backgroundColor: "primary.main",
-                color: "primary.contrastText",
+                background: "linear-gradient(135deg, #00e676, #00b248)",
+                color: "#ffffff",
+                width: 48,
+                height: 48,
                 "&:hover": {
-                  backgroundColor: "primary.dark",
+                  background: "linear-gradient(135deg, #66ffa6, #00e676)",
+                  transform: "scale(1.05)",
+                  boxShadow: "0 4px 15px rgba(0, 230, 118, 0.4)",
                 },
                 "&:disabled": {
-                  backgroundColor: "grey.300",
+                  background: "grey.600",
+                  color: "grey.400",
                 },
+                transition: "all 0.3s ease",
               }}
             >
               <SendIcon />
