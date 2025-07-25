@@ -66,8 +66,8 @@ const Chat = observer(() => {
   return (
     <Card
       sx={{
-        height: isMobile ? "calc(100vh - 140px)" : "calc(100vh - 110px)",
-        maxHeight: isMobile ? "calc(100vh - 140px)" : "870px",
+        height: isMobile ? "calc(100vh - 170px)" : "calc(100vh - 110px)",
+        maxHeight: isMobile ? "calc(100vh - 170px)" : "870px",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden", // Prevent card from growing
