@@ -1,7 +1,7 @@
 import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { join } from "path";
+import { AppModule } from "./app.module";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -11,14 +11,14 @@ async function bootstrap() {
 
   // Enable CORS
   const isProduction = process.env.NODE_ENV === "production";
-  
+
   if (isProduction) {
     // Production CORS - more restrictive
     app.enableCors({
       origin: process.env.FRONTEND_URL || false,
       credentials: true,
     });
-    
+
     // Serve static files from React build
     app.useStaticAssets(join(__dirname, "..", "public"));
   } else {
@@ -35,7 +35,7 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  
+
   console.log(`NestJS server is running on http://localhost:${port}`);
   console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
   console.log(`API available at: http://localhost:${port}/api`);

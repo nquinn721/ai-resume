@@ -5,12 +5,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Build outputs
+# Build outputs (will be built in container)
 dist
 client/dist
 *.tsbuildinfo
 
-# Environment files
+# Environment files (use container env vars instead)
 .env
 .env.local
 .env.development.local
