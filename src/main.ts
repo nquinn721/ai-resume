@@ -36,11 +36,13 @@ async function bootstrap() {
     });
 
     // Fallback route for SPA - serve index.html for all non-API routes
-    app.getHttpAdapter().get("/*", (req: any, res: any) => {
+    app.use((req: any, res: any, next: any) => {
       console.log(`Request path: ${req.path}`);
-      if (!req.path.startsWith("/api")) {
+      if (!req.path.startsWith("/api") && !req.path.includes(".")) {
         console.log(`Serving index.html for: ${req.path}`);
         res.sendFile(join(clientDistPath, "index.html"));
+      } else {
+        next();
       }
     });
   } else {
