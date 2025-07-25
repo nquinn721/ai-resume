@@ -1,0 +1,62 @@
+[
+  {
+    "id": "ai-resume-chat",
+    "title": "AI Resume Chat Bot",
+    "description": "An interactive AI-powered resume assistant built with React, TypeScript, and NestJS. Features real-time chat functionality and dynamic project showcase.",
+    "status": "live",
+    "technologies": ["React", "TypeScript", "NestJS", "MobX", "CSS3"],
+    "githubUrl": "https://github.com/yourname/ai-resume-chat",
+    "liveUrl": "https://your-ai-resume.vercel.app",
+    "image": "/api/placeholder/400/250"
+  },
+  {
+    "id": "portfolio-website",
+    "title": "Personal Portfolio",
+    "description": "A modern, responsive portfolio website showcasing my projects and skills. Built with cutting-edge web technologies.",
+    "status": "live",
+    "technologies": ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
+    "githubUrl": "https://github.com/yourname/portfolio",
+    "liveUrl": "https://your-portfolio.com",
+    "image": "/api/placeholder/400/250"
+  },
+  {
+    "id": "task-management-app",
+    "title": "Task Management System",
+    "description": "A full-stack task management application with real-time collaboration features. Includes user authentication and project organization.",
+    "status": "live",
+    "technologies": ["Vue.js", "Node.js", "MongoDB", "Socket.io", "JWT"],
+    "githubUrl": "https://github.com/yourname/task-manager",
+    "liveUrl": "https://task-manager-demo.com",
+    "image": "/api/placeholder/400/250"
+  },
+  {
+    "id": "e-commerce-platform",
+    "title": "E-Commerce Platform",
+    "description": "A comprehensive e-commerce solution with payment integration, inventory management, and admin dashboard.",
+    "status": "development",
+    "technologies": ["React", "Redux", "Express.js", "PostgreSQL", "Stripe"],
+    "githubUrl": "https://github.com/yourname/ecommerce",
+    "liveUrl": null,
+    "image": "/api/placeholder/400/250"
+  },
+  {
+    "id": "data-visualization-dashboard",
+    "title": "Data Visualization Dashboard",
+    "description": "An interactive dashboard for visualizing complex datasets with real-time updates and customizable charts.",
+    "status": "live",
+    "technologies": ["D3.js", "Python", "Flask", "PostgreSQL", "WebSocket"],
+    "githubUrl": "https://github.com/yourname/data-viz",
+    "liveUrl": "https://data-dashboard-demo.com",
+    "image": "/api/placeholder/400/250"
+  },
+  {
+    "id": "mobile-fitness-app",
+    "title": "Fitness Tracking App",
+    "description": "A cross-platform mobile app for fitness tracking with workout plans, progress monitoring, and social features.",
+    "status": "live",
+    "technologies": ["React Native", "Firebase", "Redux", "Expo"],
+    "githubUrl": "https://github.com/yourname/fitness-app",
+    "liveUrl": "https://fitness-app-store.com",
+    "image": "/api/placeholder/400/250"
+  }
+]
