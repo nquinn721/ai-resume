@@ -21,13 +21,25 @@ async function bootstrap() {
 
     // Serve static files from React build (Docker maps client/dist to ./public)
     const clientDistPath = join(__dirname, "..", "public");
+    console.log(`Looking for static files at: ${clientDistPath}`);
+
+    // Check if index.html exists
+    const fs = require("fs");
+    const indexPath = join(clientDistPath, "index.html");
+    console.log(`Index.html exists: ${fs.existsSync(indexPath)}`);
+    if (fs.existsSync(clientDistPath)) {
+      console.log(`Public directory contents:`, fs.readdirSync(clientDistPath));
+    }
+
     app.useStaticAssets(clientDistPath, {
       index: false, // Don't serve index.html automatically
     });
 
     // Fallback route for SPA - serve index.html for all non-API routes
     app.getHttpAdapter().get("*", (req: any, res: any) => {
+      console.log(`Request path: ${req.path}`);
       if (!req.path.startsWith("/api")) {
+        console.log(`Serving index.html for: ${req.path}`);
         res.sendFile(join(clientDistPath, "index.html"));
       }
     });
