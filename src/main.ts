@@ -19,14 +19,14 @@ async function bootstrap() {
       credentials: true,
     });
 
-    // Serve static files from React build
-    const clientDistPath = join(__dirname, "..", "client", "dist");
+    // Serve static files from React build (Docker maps client/dist to ./public)
+    const clientDistPath = join(__dirname, "..", "public");
     app.useStaticAssets(clientDistPath);
-    
+
     // Fallback route for SPA - serve index.html for all non-API routes
     app.use((req, res, next) => {
-      if (!req.path.startsWith('/api')) {
-        res.sendFile(join(clientDistPath, 'index.html'));
+      if (!req.path.startsWith("/api")) {
+        res.sendFile(join(clientDistPath, "index.html"));
       } else {
         next();
       }
