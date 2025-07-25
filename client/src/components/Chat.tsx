@@ -39,13 +39,20 @@ const Chat = observer(() => {
     scrollToBottom();
   }, [appStore.isTyping]);
 
+  // Additional scroll trigger for when new messages are added
+  useEffect(() => {
+    const timeoutId = setTimeout(scrollToBottom, 100);
+    return () => clearTimeout(timeoutId);
+  }, [appStore.messages.length]);
+
   const handleSend = async () => {
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || appStore.isTyping) return;
 
     const message = inputValue.trim();
-    setInputValue("");
-
+    
+    // Send message and clear input
     await appStore.sendMessage(message);
+    setInputValue("");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -58,23 +65,54 @@ const Chat = observer(() => {
   return (
     <Card
       sx={{
-        height: isMobile ? "calc(100vh - 200px)" : "600px",
+        height: isMobile ? "calc(100vh - 90px)" : "calc(100vh - 110px)",
+        maxHeight: isMobile ? "calc(100vh - 90px)" : "870px",
         display: "flex",
         flexDirection: "column",
+        overflow: "hidden", // Prevent card from growing
       }}
     >
       <CardContent
-        sx={{ flexGrow: 1, display: "flex", flexDirection: "column", p: 0 }}
+        sx={{ 
+          flexGrow: 1, 
+          display: "flex", 
+          flexDirection: "column", 
+          p: 0,
+          minHeight: 0, // Important for flex scroll
+          overflow: "hidden",
+          "&:last-child": {
+            paddingBottom: 0, // Override MUI default
+          },
+        }}
       >
         {/* Messages Container */}
         <Box
+          className="chat-container"
           sx={{
             flexGrow: 1,
             overflowY: "auto",
+            overflowX: "hidden",
             p: 2,
             display: "flex",
             flexDirection: "column",
             gap: 2,
+            minHeight: 0, // Important for flex scroll
+            maxHeight: "100%",
+            scrollBehavior: "smooth",
+            "&::-webkit-scrollbar": {
+              width: "6px",
+            },
+            "&::-webkit-scrollbar-track": {
+              background: "rgba(0,0,0,0.1)",
+              borderRadius: "3px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: "rgba(0, 230, 118, 0.3)",
+              borderRadius: "3px",
+              "&:hover": {
+                background: "rgba(0, 230, 118, 0.5)",
+              },
+            },
           }}
         >
           {appStore.formattedMessages.map((message) => (
@@ -93,28 +131,34 @@ const Chat = observer(() => {
                   p: 2,
                   maxWidth: "80%",
                   background:
-                    message.sender === "user" 
+                    message.sender === "user"
                       ? "linear-gradient(135deg, #00e676, #00b248)"
                       : "linear-gradient(135deg, #1a1e3a, #2a2e4a)",
                   color: "#ffffff",
                   borderRadius: 3,
-                  border: message.sender === "bot" ? "1px solid #03dac6" : "none",
-                  boxShadow: message.sender === "user" 
-                    ? "0 4px 15px rgba(0, 230, 118, 0.3)"
-                    : "0 4px 15px rgba(3, 218, 198, 0.2)",
+                  border:
+                    message.sender === "bot" ? "1px solid #03dac6" : "none",
+                  boxShadow:
+                    message.sender === "user"
+                      ? "0 4px 15px rgba(0, 230, 118, 0.3)"
+                      : "0 4px 15px rgba(3, 218, 198, 0.2)",
                   position: "relative",
-                  "&::before": message.sender === "bot" ? {
-                    content: '""',
-                    position: "absolute",
-                    top: -1,
-                    left: -1,
-                    right: -1,
-                    bottom: -1,
-                    background: "linear-gradient(45deg, #03dac6, #ff6ec7)",
-                    borderRadius: 3,
-                    zIndex: -1,
-                    opacity: 0.3,
-                  } : {},
+                  "&::before":
+                    message.sender === "bot"
+                      ? {
+                          content: '""',
+                          position: "absolute",
+                          top: -1,
+                          left: -1,
+                          right: -1,
+                          bottom: -1,
+                          background:
+                            "linear-gradient(45deg, #03dac6, #ff6ec7)",
+                          borderRadius: 3,
+                          zIndex: -1,
+                          opacity: 0.3,
+                        }
+                      : {},
                 }}
               >
                 <Typography variant="body1" sx={{ mb: 1 }}>
@@ -151,21 +195,31 @@ const Chat = observer(() => {
                   boxShadow: "0 4px 15px rgba(3, 218, 198, 0.2)",
                 }}
               >
-                <CircularProgress 
-                  size={16} 
-                  sx={{ 
+                <CircularProgress
+                  size={16}
+                  sx={{
                     color: "#03dac6",
-                    animation: "pulse 1.5s infinite"
-                  }} 
+                    animation: "pulse 1.5s infinite",
+                  }}
                 />
-                <Typography variant="body2" sx={{ color: "#03dac6", fontWeight: 500 }}>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "#03dac6", fontWeight: 500 }}
+                >
                   AI is typing...
                 </Typography>
               </Paper>
             </Box>
           )}
 
-          <div ref={messagesEndRef} />
+          <div 
+            ref={messagesEndRef} 
+            style={{ 
+              height: "1px", 
+              width: "100%", 
+              flexShrink: 0 
+            }} 
+          />
         </Box>
 
         {/* Input Container */}
@@ -188,7 +242,13 @@ const Chat = observer(() => {
               placeholder="Ask me about my resume..."
               variant="outlined"
               size="small"
-              sx={{ flexGrow: 1 }}
+              disabled={appStore.isTyping}
+              sx={{ 
+                flexGrow: 1,
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "background.paper",
+                },
+              }}
             />
             <IconButton
               onClick={handleSend}

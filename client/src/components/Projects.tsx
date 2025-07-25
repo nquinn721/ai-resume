@@ -245,7 +245,11 @@ const Projects = observer(() => {
                     mb: 1,
                   }}
                 >
-                  <Typography variant="subtitle1" fontWeight="medium">
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="medium"
+                    sx={{ color: "#ffffff" }}
+                  >
                     {project.name}
                   </Typography>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>

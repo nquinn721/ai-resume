@@ -37,7 +37,7 @@ export class ResumeApi extends BaseApi {
 
   // Get health status
   async getHealthStatus(): Promise<ApiResponse<HealthResponse>> {
-    return this.getRootLevel<HealthResponse>("/health");
+    return this.get<HealthResponse>("/health");
   }
 
   // Get chat history (if implemented on backend)

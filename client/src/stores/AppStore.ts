@@ -220,7 +220,7 @@ export class AppStore {
       console.log("Resume data received:", data);
 
       runInAction(() => {
-        this.resumeContent = data.html;
+        this.resumeContent = this.enhanceResumeFormatting(data.html);
       });
     } catch (err: any) {
       console.error("Error loading resume:", err);
@@ -232,6 +232,193 @@ export class AppStore {
         this.isLoadingResume = false;
       });
     }
+  }
+
+  // Enhance resume content formatting
+  private enhanceResumeFormatting(html: string): string {
+    if (!html) return html;
+
+    // Create a temporary DOM element to parse the HTML
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    // Define patterns for common resume elements
+    const datePattern = /\b(19|20)\d{2}\b/g; // Years
+    const dateRangePattern = /\b(19|20)\d{2}\s*[-–—]\s*(19|20)\d{2}\b/g; // Date ranges
+    const monthYearPattern =
+      /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+(19|20)\d{2}\b/gi;
+
+    // Common company indicators (case insensitive)
+    const companyIndicators = [
+      "Inc\\.?",
+      "LLC",
+      "Corp\\.?",
+      "Corporation",
+      "Company",
+      "Co\\.?",
+      "Ltd\\.?",
+      "Limited",
+      "Technologies",
+      "Tech",
+      "Solutions",
+      "Systems",
+      "Services",
+      "Group",
+      "Partners",
+      "Associates",
+      "Consulting",
+      "Consultants",
+    ];
+
+    // Common job title patterns
+    const jobTitlePatterns = [
+      "Developer",
+      "Engineer",
+      "Manager",
+      "Director",
+      "Analyst",
+      "Specialist",
+      "Coordinator",
+      "Administrator",
+      "Consultant",
+      "Lead",
+      "Senior",
+      "Junior",
+      "Associate",
+      "Principal",
+      "Chief",
+      "Vice President",
+      "VP",
+      "President",
+    ];
+
+    // Common technologies
+    const technologies = [
+      "JavaScript",
+      "TypeScript",
+      "Python",
+      "Java",
+      "C#",
+      "PHP",
+      "Ruby",
+      "Go",
+      "React",
+      "Angular",
+      "Vue",
+      "Node.js",
+      "Express",
+      "Django",
+      "Flask",
+      "Spring",
+      "Laravel",
+      "Rails",
+      "MongoDB",
+      "PostgreSQL",
+      "MySQL",
+      "Redis",
+      "AWS",
+      "Azure",
+      "GCP",
+      "Docker",
+      "Kubernetes",
+      "Git",
+      "Jenkins",
+      "CI/CD",
+    ];
+
+    // Function to wrap text with styling class
+    const wrapWithClass = (text: string, className: string) => {
+      return `<span class="${className}">${text}</span>`;
+    };
+
+    // Process all text nodes
+    const processTextNode = (node: Text) => {
+      let content = node.textContent || "";
+
+      // Highlight date ranges first (more specific)
+      content = content.replace(dateRangePattern, (match) =>
+        wrapWithClass(match, "resume-date")
+      );
+
+      // Highlight individual years
+      content = content.replace(datePattern, (match) =>
+        wrapWithClass(match, "resume-date")
+      );
+
+      // Highlight month-year combinations
+      content = content.replace(monthYearPattern, (match) =>
+        wrapWithClass(match, "resume-date")
+      );
+
+      // Highlight technologies
+      technologies.forEach((tech) => {
+        const techRegex = new RegExp(
+          `\\b${tech.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`,
+          "gi"
+        );
+        content = content.replace(techRegex, (match) =>
+          wrapWithClass(match, "resume-tech")
+        );
+      });
+
+      return content;
+    };
+
+    // Walk through all text nodes and enhance them
+    const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT, null);
+
+    const textNodes: Text[] = [];
+    let node;
+    while ((node = walker.nextNode())) {
+      textNodes.push(node as Text);
+    }
+
+    textNodes.forEach((textNode) => {
+      const enhanced = processTextNode(textNode);
+      if (enhanced !== textNode.textContent) {
+        const wrapper = doc.createElement("span");
+        wrapper.innerHTML = enhanced;
+        textNode.parentNode?.replaceChild(wrapper, textNode);
+      }
+    });
+
+    // Enhance headings that might be job titles
+    const headings = doc.querySelectorAll("h3, h4, h5");
+    headings.forEach((heading) => {
+      const text = heading.textContent || "";
+
+      // Check if it contains job title patterns
+      const hasJobTitle = jobTitlePatterns.some((pattern) =>
+        new RegExp(`\\b${pattern}\\b`, "i").test(text)
+      );
+
+      if (hasJobTitle) {
+        heading.classList.add("resume-job-title");
+      }
+    });
+
+    // Enhance paragraphs that might contain company names
+    const paragraphs = doc.querySelectorAll("p");
+    paragraphs.forEach((p) => {
+      const text = p.textContent || "";
+
+      // Check if it contains company indicators
+      const hasCompanyIndicator = companyIndicators.some((indicator) =>
+        new RegExp(`\\b${indicator}\\b`, "i").test(text)
+      );
+
+      if (hasCompanyIndicator && text.length < 100) {
+        // Likely a company name line
+        // Find strong elements within this paragraph and enhance them
+        const strongElements = p.querySelectorAll("strong");
+        strongElements.forEach((strong) => {
+          strong.classList.add("resume-company");
+        });
+      }
+    });
+
+    // Return the enhanced HTML
+    return doc.body.innerHTML;
   }
 
   // Get formatted messages for display
