@@ -13,7 +13,7 @@ interface ChatResponse {
   timestamp: string;
 }
 
-@Controller("api/chat")
+@Controller("chat")
 export class ChatController {
   constructor(
     private readonly aiChatService: AiChatService,

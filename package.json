@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "main": "dist/main.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "cd client && npm ci && npm run build",
+    "build:server": "tsc",
     "start": "node dist/main.js",
     "start:dev": "nodemon src/main.ts",
     "start:debug": "nodemon --config nodemon-debug.json",
     "prestart:prod": "npm run build",
-    "start:prod": "node dist/main.js",
+    "start:prod": "NODE_ENV=production node dist/main.js",
+    "install:all": "npm ci && cd client && npm ci",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -20,14 +23,15 @@
   "license": "ISC",
   "description": "NestJS backend for MyAIResume application",
   "dependencies": {
+    "@google/generative-ai": "^0.19.0",
     "@nestjs/common": "^11.1.5",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.5",
     "@nestjs/platform-express": "^11.1.5",
     "docx": "^9.5.1",
+    "express": "^5.1.0",
     "mammoth": "^1.9.1",
     "multer": "^2.0.2",
-    "@google/generative-ai": "^0.19.0",
     "pdf-parse": "^1.1.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"

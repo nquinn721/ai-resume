@@ -13,7 +13,9 @@
       "css3",
       "nestjs",
       "mysql",
-      "mobx"
+      "mobx",
+      "canvas",
+      "threejs"
     ],
     "description": "A real-time multiplayer space combat game developed with Phaser and React, offering fast-paced gameplay, dynamic visuals, and interactive user experiences. Players can compete in engaging battles, customize their ships, and track their progress through a modern, responsive interface powered by a robust NestJS backend. Claude AI was used to help build the architecture."
   }

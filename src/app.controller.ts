@@ -18,9 +18,4 @@ export class AppController {
       uptime: process.uptime(),
     };
   }
-
-  @Get("api/health")
-  getApiHealth(): { status: string; timestamp: string; uptime: number } {
-    return this.getHealth();
-  }
 }
