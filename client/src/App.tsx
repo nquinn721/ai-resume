@@ -187,7 +187,9 @@ const App = observer(() => {
                       mb: 2,
                     }}
                   >
-                    <Typography variant="h6">Menu</Typography>
+                    <Typography variant="h6" sx={{ color: "#ffffff" }}>
+                      Menu
+                    </Typography>
                     <IconButton onClick={() => setMobileMenuOpen(false)}>
                       <CloseIcon />
                     </IconButton>
@@ -196,7 +198,11 @@ const App = observer(() => {
                   {/* Suggestions in mobile drawer */}
                   <Card sx={{ mb: 3 }}>
                     <CardContent>
-                      <Typography variant="h6" gutterBottom>
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        sx={{ color: "#ffffff" }}
+                      >
                         <ChatIcon sx={{ mr: 1, verticalAlign: "middle" }} />
                         Quick Questions
                       </Typography>
@@ -255,7 +261,11 @@ const App = observer(() => {
               <Box sx={{ width: 300, flexShrink: 0 }}>
                 <Card>
                   <CardContent>
-                    <Typography variant="h6" gutterBottom sx={{ color: "#ffffff" }}>
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      sx={{ color: "#ffffff" }}
+                    >
                       <ChatIcon sx={{ mr: 1, verticalAlign: "middle" }} />
                       Chat with Nathan's AI Assistant
                     </Typography>
@@ -366,7 +376,7 @@ const App = observer(() => {
                 >
                   Download
                 </Button>
-                <IconButton 
+                <IconButton
                   onClick={() => appStore.closeResumeModal()}
                   sx={{ color: "#e2e8f0" }}
                 >
@@ -495,9 +505,11 @@ const App = observer(() => {
                   variant="contained"
                   onClick={() => appStore.loadResume()}
                   sx={{
-                    background: "linear-gradient(135deg, #00e676 0%, #ff6ec7 50%, #03dac6 100%)",
+                    background:
+                      "linear-gradient(135deg, #00e676 0%, #ff6ec7 50%, #03dac6 100%)",
                     "&:hover": {
-                      background: "linear-gradient(135deg, #00c766 0%, #e55cb7 50%, #02b8a6 100%)",
+                      background:
+                        "linear-gradient(135deg, #00c766 0%, #e55cb7 50%, #02b8a6 100%)",
                     },
                   }}
                 >

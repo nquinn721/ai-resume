@@ -50,7 +50,7 @@ const Chat = observer(() => {
     if (!inputValue.trim() || appStore.isTyping) return;
 
     const message = inputValue.trim();
-    
+
     // Send message and clear input
     await appStore.sendMessage(message);
     setInputValue("");
@@ -74,10 +74,10 @@ const Chat = observer(() => {
       }}
     >
       <CardContent
-        sx={{ 
-          flexGrow: 1, 
-          display: "flex", 
-          flexDirection: "column", 
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
           p: 0,
           minHeight: 0, // Important for flex scroll
           overflow: "hidden",
@@ -167,37 +167,58 @@ const Chat = observer(() => {
                     <ReactMarkdown
                       components={{
                         h1: ({ children }) => (
-                          <Typography variant="h5" sx={{ color: "#ffffff", fontWeight: 700, mb: 1 }}>
+                          <Typography
+                            variant="h5"
+                            sx={{ color: "#ffffff", fontWeight: 700, mb: 1 }}
+                          >
                             {children}
                           </Typography>
                         ),
                         h2: ({ children }) => (
-                          <Typography variant="h6" sx={{ color: "#ffffff", fontWeight: 600, mb: 1 }}>
+                          <Typography
+                            variant="h6"
+                            sx={{ color: "#ffffff", fontWeight: 600, mb: 1 }}
+                          >
                             {children}
                           </Typography>
                         ),
                         h3: ({ children }) => (
-                          <Typography variant="subtitle1" sx={{ color: "#ffffff", fontWeight: 600, mb: 0.5 }}>
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ color: "#ffffff", fontWeight: 600, mb: 0.5 }}
+                          >
                             {children}
                           </Typography>
                         ),
                         p: ({ children }) => (
-                          <Typography variant="body1" sx={{ color: "#ffffff", mb: 1, lineHeight: 1.6 }}>
+                          <Typography
+                            variant="body1"
+                            sx={{ color: "#ffffff", mb: 1, lineHeight: 1.6 }}
+                          >
                             {children}
                           </Typography>
                         ),
                         strong: ({ children }) => (
-                          <Box component="span" sx={{ fontWeight: 700, color: "#00e676" }}>
+                          <Box
+                            component="span"
+                            sx={{ fontWeight: 700, color: "#00e676" }}
+                          >
                             {children}
                           </Box>
                         ),
                         ul: ({ children }) => (
-                          <Box component="ul" sx={{ pl: 2, mb: 1, color: "#ffffff" }}>
+                          <Box
+                            component="ul"
+                            sx={{ pl: 2, mb: 1, color: "#ffffff" }}
+                          >
                             {children}
                           </Box>
                         ),
                         li: ({ children }) => (
-                          <Box component="li" sx={{ mb: 0.5, color: "#ffffff" }}>
+                          <Box
+                            component="li"
+                            sx={{ mb: 0.5, color: "#ffffff" }}
+                          >
                             {children}
                           </Box>
                         ),
@@ -274,13 +295,13 @@ const Chat = observer(() => {
             </Box>
           )}
 
-          <div 
-            ref={messagesEndRef} 
-            style={{ 
-              height: "1px", 
-              width: "100%", 
-              flexShrink: 0 
-            }} 
+          <div
+            ref={messagesEndRef}
+            style={{
+              height: "1px",
+              width: "100%",
+              flexShrink: 0,
+            }}
           />
         </Box>
 
@@ -305,7 +326,7 @@ const Chat = observer(() => {
               variant="outlined"
               size="small"
               disabled={appStore.isTyping}
-              sx={{ 
+              sx={{
                 flexGrow: 1,
                 "& .MuiOutlinedInput-root": {
                   backgroundColor: "background.paper",
