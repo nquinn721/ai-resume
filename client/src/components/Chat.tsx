@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { appStore } from "../stores/AppStore";
 
 const Chat = observer(() => {
@@ -161,9 +162,70 @@ const Chat = observer(() => {
                       : {},
                 }}
               >
-                <Typography variant="body1" sx={{ mb: 1 }}>
-                  {message.text}
-                </Typography>
+                {message.sender === "bot" ? (
+                  <Box sx={{ mb: 1 }}>
+                    <ReactMarkdown
+                      components={{
+                        h1: ({ children }) => (
+                          <Typography variant="h5" sx={{ color: "#ffffff", fontWeight: 700, mb: 1 }}>
+                            {children}
+                          </Typography>
+                        ),
+                        h2: ({ children }) => (
+                          <Typography variant="h6" sx={{ color: "#ffffff", fontWeight: 600, mb: 1 }}>
+                            {children}
+                          </Typography>
+                        ),
+                        h3: ({ children }) => (
+                          <Typography variant="subtitle1" sx={{ color: "#ffffff", fontWeight: 600, mb: 0.5 }}>
+                            {children}
+                          </Typography>
+                        ),
+                        p: ({ children }) => (
+                          <Typography variant="body1" sx={{ color: "#ffffff", mb: 1, lineHeight: 1.6 }}>
+                            {children}
+                          </Typography>
+                        ),
+                        strong: ({ children }) => (
+                          <Box component="span" sx={{ fontWeight: 700, color: "#00e676" }}>
+                            {children}
+                          </Box>
+                        ),
+                        ul: ({ children }) => (
+                          <Box component="ul" sx={{ pl: 2, mb: 1, color: "#ffffff" }}>
+                            {children}
+                          </Box>
+                        ),
+                        li: ({ children }) => (
+                          <Box component="li" sx={{ mb: 0.5, color: "#ffffff" }}>
+                            {children}
+                          </Box>
+                        ),
+                        code: ({ children }) => (
+                          <Box
+                            component="code"
+                            sx={{
+                              backgroundColor: "rgba(0, 230, 118, 0.1)",
+                              color: "#00e676",
+                              padding: "0.2rem 0.4rem",
+                              borderRadius: "4px",
+                              fontSize: "0.9em",
+                              fontFamily: "monospace",
+                            }}
+                          >
+                            {children}
+                          </Box>
+                        ),
+                      }}
+                    >
+                      {message.text}
+                    </ReactMarkdown>
+                  </Box>
+                ) : (
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    {message.text}
+                  </Typography>
+                )}
                 <Typography
                   variant="caption"
                   sx={{
