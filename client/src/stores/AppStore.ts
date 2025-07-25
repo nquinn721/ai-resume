@@ -195,15 +195,15 @@ export class AppStore {
 
       console.log("Attempting to fetch resume from backend...");
 
-      const response = await fetch(
-        "http://localhost:3000/api/chat/resume/formatted",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const baseURL =
+        process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
+
+      const response = await fetch(`${baseURL}/api/chat/resume/formatted`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       console.log("Response status:", response.status);
       console.log("Response ok:", response.ok);

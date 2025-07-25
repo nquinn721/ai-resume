@@ -187,11 +187,35 @@ export class BaseApi {
     };
   }
 
+  // Root level GET request (outside API prefix)
+  protected async getRootLevel<T = any>(
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<ApiResponse<T>> {
+    try {
+      const rootURL =
+        process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
+      const response = await axios.get<T>(`${rootURL}${url}`, {
+        timeout: 10000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        ...config,
+      });
+      return {
+        data: response.data,
+        success: true,
+      };
+    } catch (error: any) {
+      return this.handleError<T>(error);
+    }
+  }
+
   // Health check method
   public async healthCheck(): Promise<
     ApiResponse<{ status: string; timestamp: string }>
   > {
-    return this.get("/health");
+    return this.getRootLevel("/health");
   }
 
   // Get base URL

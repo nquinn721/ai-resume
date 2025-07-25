@@ -26,41 +26,41 @@ export interface HealthResponse {
 
 export class ResumeApi extends BaseApi {
   constructor() {
-    super("http://localhost:3000");
+    super();
   }
 
   // Send a chat message to the AI
   async sendChatMessage(message: string): Promise<ApiResponse<ChatResponse>> {
     const payload: ChatRequest = { message };
-    return this.post<ChatResponse, ChatRequest>("/api/chat", payload);
+    return this.post<ChatResponse, ChatRequest>("/chat", payload);
   }
 
   // Get health status
   async getHealthStatus(): Promise<ApiResponse<HealthResponse>> {
-    return this.get<HealthResponse>("/health");
+    return this.getRootLevel<HealthResponse>("/health");
   }
 
   // Get chat history (if implemented on backend)
   async getChatHistory(limit?: number): Promise<ApiResponse<ChatMessage[]>> {
     const params = limit ? { limit } : undefined;
-    return this.get<ChatMessage[]>("/api/chat/history", { params });
+    return this.get<ChatMessage[]>("/chat/history", { params });
   }
 
   // Clear chat history (if implemented on backend)
   async clearChatHistory(): Promise<ApiResponse<{ success: boolean }>> {
-    return this.delete<{ success: boolean }>("/api/chat/history");
+    return this.delete<{ success: boolean }>("/chat/history");
   }
 
   // Get resume data (if you want to expose resume info via API)
   async getResumeData(): Promise<ApiResponse<any>> {
-    return this.get("/resume");
+    return this.get("/chat/resume");
   }
 
   // Get projects data
   async getProjects(): Promise<
     ApiResponse<{ projects: Record<string, string> }>
   > {
-    return this.get("/api/chat/projects");
+    return this.get("/chat/projects");
   }
 }
 
