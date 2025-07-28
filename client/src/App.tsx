@@ -469,10 +469,10 @@ const App = observer(() => {
                     fontSize: "1.1em !important",
                   },
                   "& .resume-tech": {
-                    background: "rgba(167, 139, 250, 0.3) !important",
-                    color: "#c4b5fd !important",
+                    color: "#ffffffff !important",
                     border: "1px solid rgba(167, 139, 250, 0.6) !important",
                     padding: "0.1rem 0.3rem !important",
+                    backgroundColor: "rgba(167, 139, 250, 0.6)",
                     borderRadius: "4px !important",
                     fontWeight: 600,
                   },
